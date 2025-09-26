@@ -26,7 +26,7 @@ public class App {
             loginView.mostrarMenuBienvenida();
 
         } catch (Exception e) {
-            System.err.println("❌ Error crítico al iniciar la aplicación:");
+            System.err.println("Error crítico al iniciar la aplicación:");
             System.err.println(e.getMessage());
             e.printStackTrace();
 

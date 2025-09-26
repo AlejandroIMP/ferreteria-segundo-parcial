@@ -33,13 +33,13 @@ public class RegistroView {
             String username = scanner.nextLine().trim();
             
             if (username.isEmpty()) {
-                System.out.println("❌ El nombre de usuario no puede estar vacío.");
+                System.out.println("El nombre de usuario no puede estar vacío.");
                 return false;
             }
 
             // Verificar si el usuario ya existe
             if (usuarioController.buscarPorUsername(username) != null) {
-                System.out.println("❌ El nombre de usuario ya existe. Elija otro.");
+                System.out.println("El nombre de usuario ya existe. Elija otro.");
                 return false;
             }
 
@@ -47,7 +47,7 @@ public class RegistroView {
             String password = scanner.nextLine();
             
             if (password.length() < 6) {
-                System.out.println("❌ La contraseña debe tener al menos 6 caracteres.");
+                System.out.println("La contraseña debe tener al menos 6 caracteres.");
                 return false;
             }
 
@@ -55,7 +55,7 @@ public class RegistroView {
             String confirmarPassword = scanner.nextLine();
             
             if (!password.equals(confirmarPassword)) {
-                System.out.println("❌ Las contraseñas no coinciden.");
+                System.out.println("Las contraseñas no coinciden.");
                 return false;
             }
 
@@ -63,7 +63,7 @@ public class RegistroView {
             String nombre = scanner.nextLine().trim();
             
             if (nombre.isEmpty()) {
-                System.out.println("❌ El nombre no puede estar vacío.");
+                System.out.println("El nombre no puede estar vacío.");
                 return false;
             }
 
@@ -71,7 +71,7 @@ public class RegistroView {
             String apellido = scanner.nextLine().trim();
             
             if (apellido.isEmpty()) {
-                System.out.println("❌ El apellido no puede estar vacío.");
+                System.out.println("El apellido no puede estar vacío.");
                 return false;
             }
 
@@ -80,13 +80,13 @@ public class RegistroView {
             
             // Validar email si se proporciona
             if (!email.isEmpty() && !isValidEmail(email)) {
-                System.out.println("❌ El formato del email no es válido.");
+                System.out.println("El formato del email no es válido.");
                 return false;
             }
 
             // Verificar si el email ya existe
             if (!email.isEmpty() && usuarioController.buscarPorEmail(email) != null) {
-                System.out.println("❌ El email ya está registrado.");
+                System.out.println("El email ya está registrado.");
                 return false;
             }
 
@@ -96,7 +96,7 @@ public class RegistroView {
             // Mostrar roles disponibles
             Long rolId = seleccionarRol();
             if (rolId == null) {
-                System.out.println("❌ Debe seleccionar un rol válido.");
+                System.out.println("Debe seleccionar un rol válido.");
                 return false;
             }
 
@@ -119,19 +119,19 @@ public class RegistroView {
             if (confirmacion.equals("s") || confirmacion.equals("si")) {
                 if (usuarioController.registrarUsuario(username, password, confirmarPassword, 
                                                      nombre, apellido, email, telefono, rolId)) {
-                    System.out.println("✅ Usuario registrado exitosamente!");
+                    System.out.println("Usuario registrado exitosamente!");
                     return true;
                 } else {
-                    System.out.println("❌ Error al registrar el usuario. Intente nuevamente.");
+                    System.out.println("Error al registrar el usuario. Intente nuevamente.");
                     return false;
                 }
             } else {
-                System.out.println("❌ Registro cancelado.");
+                System.out.println("Registro cancelado.");
                 return false;
             }
 
         } catch (Exception e) {
-            System.out.println("❌ Error durante el registro: " + e.getMessage());
+            System.out.println("Error durante el registro: " + e.getMessage());
             return false;
         }
     }
@@ -143,7 +143,7 @@ public class RegistroView {
         List<Rol> roles = rolController.listarActivos();
         
         if (roles.isEmpty()) {
-            System.out.println("❌ No hay roles disponibles.");
+            System.out.println("No hay roles disponibles.");
             return null;
         }
 
@@ -163,12 +163,12 @@ public class RegistroView {
                 // Mostrar permisos del rol seleccionado
                 System.out.println("\nPermisos del rol '" + rolSeleccionado.getNombre() + "':");
                 System.out.println("─────────────────────────────────────────────");
-                System.out.println("• Realizar ventas: " + (rolSeleccionado.isPuedeVender() ? "✅" : "❌"));
-                System.out.println("• Gestionar inventario: " + (rolSeleccionado.isPuedeGestionarInventario() ? "✅" : "❌"));
-                System.out.println("• Gestionar usuarios: " + (rolSeleccionado.isPuedeGestionarUsuarios() ? "✅" : "❌"));
-                System.out.println("• Generar reportes: " + (rolSeleccionado.isPuedeGenerarReportes() ? "✅" : "❌"));
-                System.out.println("• Gestionar clientes: " + (rolSeleccionado.isPuedeGestionarClientes() ? "✅" : "❌"));
-                System.out.println("• Gestionar proveedores: " + (rolSeleccionado.isPuedeGestionarProveedores() ? "✅" : "❌"));
+                System.out.println("• Realizar ventas: " + (rolSeleccionado.isPuedeVender() ? "si" : "no"));
+                System.out.println("• Gestionar inventario: " + (rolSeleccionado.isPuedeGestionarInventario() ? "si" : "no"));
+                System.out.println("• Gestionar usuarios: " + (rolSeleccionado.isPuedeGestionarUsuarios() ? "si" : "no"));
+                System.out.println("• Generar reportes: " + (rolSeleccionado.isPuedeGenerarReportes() ? "si" : "no"));
+                System.out.println("• Gestionar clientes: " + (rolSeleccionado.isPuedeGestionarClientes() ? "si" : "no"));
+                System.out.println("• Gestionar proveedores: " + (rolSeleccionado.isPuedeGestionarProveedores() ? "si" : "no"));
                 
                 System.out.print("\n¿Confirma este rol? (s/n): ");
                 String confirmacion = scanner.nextLine().trim().toLowerCase();
@@ -179,11 +179,11 @@ public class RegistroView {
                     return seleccionarRol(); // Volver a mostrar la lista
                 }
             } else {
-                System.out.println("❌ Opción no válida.");
+                System.out.println("Opción no válida.");
                 return seleccionarRol();
             }
         } catch (NumberFormatException e) {
-            System.out.println("❌ Por favor ingrese un número válido.");
+            System.out.println("Por favor ingrese un número válido.");
             return seleccionarRol();
         }
     }

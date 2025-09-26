@@ -110,27 +110,27 @@ public class RolController {
             if (buscarPorNombre("ADMINISTRADOR") == null) {
                 Rol admin = Rol.createAdministrador();
                 rolDAO.crear(admin);
-                System.out.println("✅ Rol ADMINISTRADOR creado");
+                System.out.println("Rol ADMINISTRADOR creado");
             }
 
             // Rol Vendedor
             if (buscarPorNombre("VENDEDOR") == null) {
                 Rol vendedor = Rol.createVendedor();
                 rolDAO.crear(vendedor);
-                System.out.println("✅ Rol VENDEDOR creado");
+                System.out.println("Rol VENDEDOR creado");
             }
 
             // Rol Inventario
             if (buscarPorNombre("INVENTARIO") == null) {
                 Rol inventario = Rol.createInventario();
                 rolDAO.crear(inventario);
-                System.out.println("✅ Rol INVENTARIO creado");
+                System.out.println("Rol INVENTARIO creado");
             }
 
-            System.out.println("✅ Roles del sistema inicializados correctamente");
+            System.out.println("Roles del sistema inicializados correctamente");
 
         } catch (Exception e) {
-            System.err.println("❌ Error al inicializar roles del sistema: " + e.getMessage());
+            System.err.println("Error al inicializar roles del sistema: " + e.getMessage());
         }
     }
 

@@ -31,7 +31,7 @@ public class LoginView {
             String username = scanner.nextLine().trim();
 
             if (username.isEmpty()) {
-                System.out.println("❌ El usuario no puede estar vacío.");
+                System.out.println("El usuario no puede estar vacío.");
                 continue;
             }
 
@@ -39,13 +39,13 @@ public class LoginView {
             String password = scanner.nextLine();
 
             if (password.isEmpty()) {
-                System.out.println("❌ La contraseña no puede estar vacía.");
+                System.out.println("La contraseña no puede estar vacía.");
                 continue;
             }
 
             if (usuarioController.iniciarSesion(username, password)) {
                 Usuario usuario = usuarioController.getUsuarioActual();
-                System.out.println("✅ Bienvenido, " + usuario.getNombreCompleto() + "!");
+                System.out.println("Bienvenido, " + usuario.getNombreCompleto() + "!");
                 System.out.println("Rol: " + usuario.getRol().getNombre());
 
                 System.out.println("\nPresione Enter para continuar...");
@@ -57,11 +57,11 @@ public class LoginView {
                 int intentosRestantes = maxIntentos - intentos;
 
                 if (intentosRestantes > 0) {
-                    System.out.println("❌ Usuario o contraseña incorrectos.");
+                    System.out.println("Usuario o contraseña incorrectos.");
                     System.out.println("Intentos restantes: " + intentosRestantes);
                     System.out.println();
                 } else {
-                    System.out.println("❌ Se han agotado los intentos de inicio de sesión.");
+                    System.out.println("Se han agotado los intentos de inicio de sesión.");
                     System.out.println("El sistema se cerrará por seguridad.");
 
                     System.out.println("\nPresione Enter para salir...");
@@ -105,7 +105,7 @@ public class LoginView {
                 case 2:
                     RegistroView registroView = new RegistroView();
                     if (registroView.mostrarRegistro()) {
-                        System.out.println("✅ Usuario registrado exitosamente.");
+                        System.out.println("Usuario registrado exitosamente.");
                         System.out.println("Ahora puede iniciar sesión.");
                         System.out.println("\nPresione Enter para continuar...");
                         scanner.nextLine();
@@ -117,10 +117,10 @@ public class LoginView {
                     return false;
 
                 default:
-                    System.out.println("❌ Opción no válida.");
+                    System.out.println("Opción no válida.");
             }
         } catch (NumberFormatException e) {
-            System.out.println("❌ Por favor ingrese un número válido.");
+            System.out.println("Por favor ingrese un número válido.");
         }
 
         if (scanner.hasNextLine()) {

@@ -38,7 +38,7 @@ public class MainView {
 
     public void mostrarMenu() {
         if (!usuarioController.isUsuarioLogueado()) {
-            System.out.println("❌ Debe iniciar sesión para acceder al sistema.");
+            System.out.println("Debe iniciar sesión para acceder al sistema.");
             return;
         }
 
@@ -56,7 +56,7 @@ public class MainView {
                 int opcion = Integer.parseInt(scanner.nextLine());
                 continuar = procesarOpcion(opcion, usuarioActual);
             } catch (NumberFormatException e) {
-                System.out.println("❌ Por favor ingrese un número válido.");
+                System.out.println("Por favor ingrese un número válido.");
                 pausar();
             }
         }
@@ -189,7 +189,7 @@ public class MainView {
             return confirmarSalida();
         }
 
-        System.out.println("❌ Opción no válida.");
+        System.out.println("Opción no válida.");
         pausar();
         return true;
     }
@@ -213,7 +213,7 @@ public class MainView {
             System.out.println("─────────────────────");
             System.out.println(dashboardInfo);
         } catch (Exception e) {
-            System.out.println("❌ Error al cargar información del dashboard: " + e.getMessage());
+            System.out.println("Error al cargar información del dashboard: " + e.getMessage());
         }
 
         pausar();
@@ -233,7 +233,7 @@ public class MainView {
         String nuevaPassword = scanner.nextLine();
 
         if (nuevaPassword.length() < 6) {
-            System.out.println("❌ La contraseña debe tener al menos 6 caracteres.");
+            System.out.println("La contraseña debe tener al menos 6 caracteres.");
             pausar();
             return;
         }
@@ -242,15 +242,15 @@ public class MainView {
         String confirmarPassword = scanner.nextLine();
 
         if (!nuevaPassword.equals(confirmarPassword)) {
-            System.out.println("❌ Las contraseñas no coinciden.");
+            System.out.println("Las contraseñas no coinciden.");
             pausar();
             return;
         }
 
         if (usuarioController.cambiarPassword(passwordActual, nuevaPassword)) {
-            System.out.println("✅ Contraseña cambiada exitosamente.");
+            System.out.println("Contraseña cambiada exitosamente.");
         } else {
-            System.out.println("❌ Error al cambiar la contraseña. Verifique que la contraseña actual sea correcta.");
+            System.out.println("Error al cambiar la contraseña. Verifique que la contraseña actual sea correcta.");
         }
 
         pausar();
@@ -263,7 +263,7 @@ public class MainView {
 
         if (respuesta.equals("s") || respuesta.equals("si")) {
             usuarioController.cerrarSesion();
-            System.out.println("✅ Sesión cerrada exitosamente.");
+            System.out.println("Sesión cerrada exitosamente.");
 
             // Volver al menú de login
             LoginView loginView = new LoginView();
