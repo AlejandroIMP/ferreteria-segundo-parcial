@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class RegistroView {
-    private Scanner scanner;
-    private UsuarioController usuarioController;
-    private RolController rolController;
+    private final Scanner scanner;
+    private final UsuarioController usuarioController;
+    private final RolController rolController;
 
     public RegistroView() {
         this.scanner = new Scanner(System.in);

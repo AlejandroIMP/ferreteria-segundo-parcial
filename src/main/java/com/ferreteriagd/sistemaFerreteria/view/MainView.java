@@ -6,16 +6,16 @@ import com.ferreteriagd.sistemaFerreteria.model.Usuario;
 import java.util.Scanner;
 
 public class MainView {
-    private Scanner scanner;
-    private ClienteView clienteView;
-    private ProductView productView;
-    private ProveedorView proveedorView;
-    private VentaView ventaView;
-    private UsuarioView usuarioView;
-    private RolView rolView;
-    private HistorialVentasView historialVentasView;
-    private SistemaController sistemaController;
-    private UsuarioController usuarioController;
+    private final Scanner scanner;
+    private final ClienteView clienteView;
+    private final ProductView productView;
+    private final ProveedorView proveedorView;
+    private final VentaView ventaView;
+    private final UsuarioView usuarioView;
+    private final RolView rolView;
+    private final HistorialVentasView historialVentasView;
+    private final SistemaController sistemaController;
+    private final UsuarioController usuarioController;
 
     // Constructor por defecto para compatibilidad
     public MainView() {

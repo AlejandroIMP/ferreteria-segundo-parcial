@@ -6,7 +6,7 @@ import com.ferreteriagd.sistemaFerreteria.dao.RolDAO;
 import java.util.List;
 
 public class RolController {
-    private RolDAO rolDAO;
+    private final RolDAO rolDAO;
 
     public RolController() {
         this.rolDAO = new RolDAO();
@@ -192,22 +192,15 @@ public class RolController {
 
     // Verificar si un rol tiene un permiso específico
     private boolean tienePermiso(Rol rol, String tipoPermiso) {
-        switch (tipoPermiso.toLowerCase()) {
-            case "vender":
-                return rol.isPuedeVender();
-            case "inventario":
-                return rol.isPuedeGestionarInventario();
-            case "usuarios":
-                return rol.isPuedeGestionarUsuarios();
-            case "reportes":
-                return rol.isPuedeGenerarReportes();
-            case "clientes":
-                return rol.isPuedeGestionarClientes();
-            case "proveedores":
-                return rol.isPuedeGestionarProveedores();
-            default:
-                return false;
-        }
+        return switch (tipoPermiso.toLowerCase()) {
+            case "vender" -> rol.isPuedeVender();
+            case "inventario" -> rol.isPuedeGestionarInventario();
+            case "usuarios" -> rol.isPuedeGestionarUsuarios();
+            case "reportes" -> rol.isPuedeGenerarReportes();
+            case "clientes" -> rol.isPuedeGestionarClientes();
+            case "proveedores" -> rol.isPuedeGestionarProveedores();
+            default -> false;
+        };
     }
 
     // Verificar si es un rol por defecto (no eliminable)

@@ -6,8 +6,8 @@ import com.ferreteriagd.sistemaFerreteria.model.Usuario;
 import java.util.Scanner;
 
 public class LoginView {
-    private Scanner scanner;
-    private UsuarioController usuarioController;
+    private final Scanner scanner;
+    private final UsuarioController usuarioController;
 
     public LoginView() {
         this.scanner = new Scanner(System.in);
