@@ -17,11 +17,6 @@ public class MainView {
     private final SistemaController sistemaController;
     private final UsuarioController usuarioController;
 
-    // Constructor por defecto para compatibilidad
-    public MainView() {
-        this(new UsuarioController());
-    }
-
     // Constructor que recibe el controlador de usuario con sesión iniciada
     public MainView(UsuarioController usuarioController) {
         this.scanner = new Scanner(System.in);
@@ -296,7 +291,7 @@ public class MainView {
                 new ProcessBuilder("clear").inheritIO().start().waitFor();
             }
         } catch (Exception e) {
-            // Si falla la limpieza, simplemente imprimir líneas en blanco
+            // Sí falla la limpieza, simplemente imprimir líneas en blanco
             for (int i = 0; i < 50; i++) {
                 System.out.println();
             }
