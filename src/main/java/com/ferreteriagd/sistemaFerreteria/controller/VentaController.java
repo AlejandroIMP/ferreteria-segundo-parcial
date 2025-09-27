@@ -10,18 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VentaController {
-    private VentaDAO ventaDAO;
-    private ProductDAO productDAO;
-    private ClienteDAO clienteDAO;
-    private UsuarioDAO usuarioDAO;
-    private UsuarioController usuarioController;
+    private final VentaDAO ventaDAO;
+    private final ProductDAO productDAO;
+    private final ClienteDAO clienteDAO;
+    private final UsuarioDAO usuarioDAO;
+    private final UsuarioController usuarioController;
 
     public VentaController() {
         this.ventaDAO = new VentaDAO();
         this.productDAO = new ProductDAO();
         this.clienteDAO = new ClienteDAO();
         this.usuarioDAO = new UsuarioDAO();
-        this.usuarioController = usuarioController;
+        this.usuarioController = new UsuarioController();
     }
 
     // Constructor alternativo que acepta directamente los DAOs
@@ -47,11 +47,33 @@ public class VentaController {
             }
 
             String numeroVenta = generarNumeroVenta();
-            Venta venta = new Venta(numeroVenta, cliente, usuario);
 
-            return venta; // Se guardará cuando se complete
+            return new Venta(numeroVenta, cliente, usuario);
         } catch (Exception e) {
             System.err.println("Error en VentaController.crearVenta: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public Venta crearVenta(Long clienteId, Long usuarioId) {
+        try {
+            Usuario usuario = null;
+            if (usuarioId != null) {
+                usuario = usuarioDAO.buscarPorId(usuarioId);
+            }
+            if (usuario == null || !usuario.getRol().isPuedeVender()) {
+                return null; // no seller or no permissions
+            }
+
+            Cliente cliente = null;
+            if (clienteId != null) {
+                cliente = clienteDAO.buscarPorId(clienteId);
+            }
+
+            String numeroVenta = generarNumeroVenta();
+            return new Venta(numeroVenta, cliente, usuario);
+        } catch (Exception e) {
+            System.err.println("Error en VentaController.crearVenta(usuarioId): " + e.getMessage());
             return null;
         }
     }
@@ -68,12 +90,10 @@ public class VentaController {
                 return false;
             }
 
-            // Validar stock disponible
             if (producto.getStock() < cantidad) {
                 return false;
             }
 
-            // Usar precio del producto si no se especifica
             if (precioUnitario == null) {
                 precioUnitario = producto.getPrecioVenta();
             }
@@ -86,6 +106,8 @@ public class VentaController {
             return false;
         }
     }
+
+
 
     // Remover producto de la venta
     public boolean removerProducto(Venta venta, DetalleVenta detalle) {
@@ -167,7 +189,7 @@ public class VentaController {
 
             // Guardar la venta en la base de datos
             if (ventaDAO.crear(venta)) {
-                // Actualizar stock de productos
+                // update stock in DB
                 for (DetalleVenta detalle : venta.getDetalles()) {
                     Producto producto = detalle.getProducto();
                     int nuevoStock = producto.getStock() - detalle.getCantidad();
@@ -175,7 +197,6 @@ public class VentaController {
                 }
                 return true;
             }
-
             return false;
         } catch (Exception e) {
             System.err.println("Error en VentaController.completarVenta: " + e.getMessage());
@@ -183,10 +204,20 @@ public class VentaController {
         }
     }
 
-    // Cancelar venta
     public boolean cancelarVenta(Long ventaId, String motivo) {
         try {
-            return ventaDAO.actualizarEstado(ventaId, Estado.CANCELADA);
+            Venta venta = ventaDAO.buscarPorId(ventaId);
+            if (venta == null) {
+                return false;
+            }
+            if (venta.getEstado() == Estado.CANCELADA) {
+                return false; // already cancelled
+            }
+
+            String existingObs = venta.getObservaciones() != null ? venta.getObservaciones() : "";
+            String appended = existingObs.isEmpty() ? motivo : existingObs + " | " + motivo;
+
+            return ventaDAO.actualizarEstadoConObservaciones(ventaId, Estado.CANCELADA, appended);
         } catch (Exception e) {
             System.err.println("Error en VentaController.cancelarVenta: " + e.getMessage());
             return false;
@@ -200,26 +231,42 @@ public class VentaController {
 
     // Buscar venta por número
     public Venta buscarPorNumero(String numeroVenta) {
-        // Esta funcionalidad requeriría un método específico en VentaDAO
-        return null;
+        try {
+            return ventaDAO.buscarPorNumero(numeroVenta);
+        } catch (Exception e) {
+            System.err.println("Error en VentaController.buscarPorNumero: " + e.getMessage());
+            return null;
+        }
     }
 
     // Obtener ventas por cliente
     public List<Venta> obtenerVentasPorCliente(Long clienteId) {
-        // Esta funcionalidad requeriría un método específico en VentaDAO
-        return new ArrayList<>();
+        try {
+            return ventaDAO.obtenerVentasPorCliente(clienteId);
+        } catch (Exception e) {
+            System.err.println("Error en VentaController.obtenerVentasPorCliente: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     // Obtener ventas por usuario
     public List<Venta> obtenerVentasPorUsuario(Long usuarioId) {
-        // Esta funcionalidad requeriría un método específico en VentaDAO
-        return new ArrayList<>();
+        try {
+            return ventaDAO.obtenerVentasPorUsuario(usuarioId);
+        } catch (Exception e) {
+            System.err.println("Error en VentaController.obtenerVentasPorUsuario: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     // Obtener ventas por estado
     public List<Venta> obtenerVentasPorEstado(Estado estado) {
-        // Esta funcionalidad requeriría un método específico en VentaDAO
-        return new ArrayList<>();
+        try {
+            return ventaDAO.obtenerVentasPorEstado(estado);
+        } catch (Exception e) {
+            System.err.println("Error en VentaController.obtenerVentasPorEstado: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     // Obtener ventas del día
@@ -234,8 +281,12 @@ public class VentaController {
 
     // Obtener todas las ventas
     public List<Venta> obtenerTodasLasVentas() {
-        // Esta funcionalidad requeriría un método específico en VentaDAO
-        return new ArrayList<>();
+        try {
+            return ventaDAO.listarTodos();
+        } catch (Exception e) {
+            System.err.println("Error in VentaController.obtenerTodasLasVentas: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     // Estadísticas de ventas
@@ -257,20 +308,26 @@ public class VentaController {
     }
 
     public int contarVentasPorEstado(Estado estado) {
-        // Esta funcionalidad requeriría un método específico en VentaDAO
-        return 0;
+        return (int) ventaDAO.obtenerVentasPorEstado(estado).stream()
+                .filter(v -> v.getEstado() == estado)
+                .count();
     }
 
     // Productos más vendidos
     public List<Producto> obtenerProductosMasVendidos(int limite) {
-        // Esta funcionalidad requeriría un método específico en VentaDAO
-        return new ArrayList<>();
+        try {
+            if (limite <= 0) return null;
+            return ventaDAO.obtenerProductosMasVendidos(limite);
+
+        } catch (Exception e) {
+            System.err.println("Error en VentaController.obtenerProductosMasVendidos: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     // Clientes con más compras
     public List<Cliente> obtenerClientesConMasCompras(int limite) {
-        // Esta funcionalidad requeriría un método específico en VentaDAO
-        return new ArrayList<>();
+        return ventaDAO.obtenerClientesConMasCompras(limite);
     }
 
     // Generar número de venta único
@@ -282,8 +339,14 @@ public class VentaController {
 
     // Validar si se puede modificar la venta
     public boolean puedeModificarVenta(Long ventaId) {
-        Venta venta = ventaDAO.buscarPorId(ventaId);
-        return venta != null && venta.getEstado() == Estado.PENDIENTE;
+        try{
+            Venta venta = ventaDAO.buscarPorId(ventaId);
+            return venta != null && venta.getEstado() == Estado.PENDIENTE;
+        }
+        catch (Exception e) {
+            System.err.println("Error en VentaController.puedeModificarVenta: " + e.getMessage());
+            return false;
+        }
     }
 
     // Obtener resumen de venta
@@ -405,4 +468,5 @@ public class VentaController {
             return null;
         }
     }
+
 }

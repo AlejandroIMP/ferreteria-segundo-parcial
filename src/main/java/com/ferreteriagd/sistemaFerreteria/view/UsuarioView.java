@@ -117,12 +117,12 @@ public class UsuarioView {
             if (usuarioController.crearUsuario(nombreUsuario, contrasena, nombre, apellido, email, telefono, idRol)) {
                 System.out.println("✓ Usuario creado exitosamente!");
             } else {
-                System.out.println("✗ Error al crear el usuario. Verifique que el nombre de usuario no exista.");
+                System.out.println("Error al crear el usuario. Verifique que el nombre de usuario no exista.");
             }
         } catch (NumberFormatException e) {
-            System.out.println("✗ Error: Por favor, ingrese un número válido para el rol.");
+            System.out.println("Error: Por favor, ingrese un número válido para el rol.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -157,7 +157,7 @@ public class UsuarioView {
                 }
             }
         } catch (Exception e) {
-            System.out.println("✗ Error al cargar los usuarios: " + e.getMessage());
+            System.out.println("Error al cargar los usuarios: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -202,7 +202,7 @@ public class UsuarioView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -269,12 +269,12 @@ public class UsuarioView {
             if (usuarioController.actualizarUsuario(id, nombre, apellido, email, telefono, rolId)) {
                 System.out.println("✓ Usuario actualizado exitosamente!");
             } else {
-                System.out.println("✗ Error al actualizar el usuario.");
+                System.out.println("Error al actualizar el usuario.");
             }
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese valores numéricos válidos.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -307,7 +307,7 @@ public class UsuarioView {
                 if (usuarioController.eliminarUsuario(id)) {
                     System.out.println("✓ Usuario eliminado exitosamente!");
                 } else {
-                    System.out.println("✗ Error al eliminar el usuario. Puede que no tenga permisos o sea su propio usuario.");
+                    System.out.println("Error al eliminar el usuario. Puede que no tenga permisos o sea su propio usuario.");
                 }
             } else {
                 System.out.println("Operación cancelada.");
@@ -315,7 +315,7 @@ public class UsuarioView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -354,12 +354,12 @@ public class UsuarioView {
             if (usuarioController.restablecerPassword(id, nuevaContrasena)) {
                 System.out.println("✓ Contraseña cambiada exitosamente!");
             } else {
-                System.out.println("✗ Error al cambiar la contraseña. Puede que no tenga permisos.");
+                System.out.println("Error al cambiar la contraseña. Puede que no tenga permisos.");
             }
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");

@@ -22,10 +22,11 @@ public class VentaView {
 
     public VentaView() {
         this.scanner = new Scanner(System.in);
+
+        this.usuarioController = new UsuarioController();
         this.ventaController = new VentaController();
         this.clienteController = new ClienteController();
         this.productController = new ProductController();
-        this.usuarioController = new UsuarioController();
     }
 
     public void mostrarMenu() {
@@ -85,23 +86,11 @@ public class VentaView {
         System.out.println("═══════════════════════════════════════");
 
         try {
-            // Seleccionar cliente
             System.out.print("Ingrese el ID del cliente (0 para venta sin cliente): ");
             Long idCliente = Long.parseLong(scanner.nextLine().trim());
+            if (idCliente != null && idCliente == 0) idCliente = null;
 
-            Cliente cliente = null;
-            if (idCliente > 0) {
-                cliente = clienteController.buscarPorId(idCliente);
-                if (cliente == null) {
-                    System.out.println("Cliente no encontrado.");
-                    System.out.println("\nPresione Enter para continuar...");
-                    scanner.nextLine();
-                    return;
-                }
-                System.out.println("Cliente: " + cliente.getNombre() + " " + cliente.getApellido());
-            }
-
-            // Seleccionar usuario vendedor
+            // Select seller
             List<Usuario> usuarios = usuarioController.obtenerTodosLosUsuarios();
             if (usuarios.isEmpty()) {
                 System.out.println("No hay usuarios registrados.");
@@ -118,8 +107,16 @@ public class VentaView {
             System.out.print("Seleccione el ID del usuario vendedor: ");
             Long idUsuario = Long.parseLong(scanner.nextLine().trim());
 
-            // Crear lista de productos
-            List<DetalleVenta> detalles = new ArrayList<>();
+            // Create sale with explicit seller id
+            Venta venta = ventaController.crearVenta(idCliente, idUsuario);
+            if (venta == null) {
+                System.out.println("\nError al crear la venta (usuario inválido o sin permisos).");
+                System.out.println("\nPresione Enter para continuar...");
+                scanner.nextLine();
+                return;
+            }
+
+            // Add products in-memory using agregarProducto
             BigDecimal totalVenta = BigDecimal.ZERO;
             boolean agregarMasProductos = true;
 
@@ -145,15 +142,13 @@ public class VentaView {
                     continue;
                 }
 
-                BigDecimal subtotal = producto.getPrecioVenta().multiply(BigDecimal.valueOf(cantidad));
-                // Crear detalle de venta usando constructor apropiado
-                DetalleVenta detalle = new DetalleVenta();
-                detalle.setProducto(producto);
-                detalle.setCantidad(cantidad);
-                detalle.setPrecioUnitario(producto.getPrecioVenta());
-                detalle.setSubtotal(subtotal);
+                boolean added = ventaController.agregarProducto(venta, idProducto, cantidad, producto.getPrecioVenta());
+                if (!added) {
+                    System.out.println("No se pudo agregar el producto.");
+                    continue;
+                }
 
-                detalles.add(detalle);
+                BigDecimal subtotal = producto.getPrecioVenta().multiply(BigDecimal.valueOf(cantidad));
                 totalVenta = totalVenta.add(subtotal);
 
                 System.out.println("Subtotal: $" + subtotal);
@@ -162,33 +157,31 @@ public class VentaView {
                 agregarMasProductos = respuesta.equals("S") || respuesta.equals("SI");
             }
 
-            if (detalles.isEmpty()) {
+            if (venta.getDetalles().isEmpty()) {
                 System.out.println("No se agregaron productos a la venta.");
                 System.out.println("\nPresione Enter para continuar...");
                 scanner.nextLine();
                 return;
             }
 
-            // Crear la venta usando el método correcto del controlador
-            Venta venta = ventaController.crearVenta(idCliente == 0 ? null : idCliente);
-            if (venta != null) {
-                // Agregar los detalles a la venta
-                for (DetalleVenta detalle : detalles) {
-                    ventaController.agregarDetalleVenta(venta.getId(), detalle.getProducto().getId(),
-                                                       detalle.getCantidad(), detalle.getPrecioUnitario());
-                }
+            // Persist the sale and update stock
+            System.out.print("\nMétodo de pago (enter para 'Efectivo'): ");
+            String metodo = scanner.nextLine().trim();
+            if (metodo.isEmpty()) metodo = "Efectivo";
 
-                System.out.println("\n✓ Venta creada exitosamente!");
+            boolean completed = ventaController.completarVenta(venta, metodo, "");
+            if (completed) {
+                System.out.println("\n✓ Venta creada y guardada exitosamente!");
                 System.out.println("Número de venta: " + venta.getNumeroVenta());
-                System.out.println("Total de la venta: $" + totalVenta);
+                System.out.println("Total de la venta: $" + venta.getTotal());
             } else {
-                System.out.println("\n✗ Error al crear la venta.");
+                System.out.println("\nError al crear la venta.");
             }
 
         } catch (NumberFormatException e) {
-            System.out.println("✗ Error: Por favor, ingrese valores numéricos válidos.");
+            System.out.println("Error: Por favor, ingrese valores numéricos válidos.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -225,7 +218,7 @@ public class VentaView {
                 }
             }
         } catch (Exception e) {
-            System.out.println("✗ Error al cargar las ventas: " + e.getMessage());
+            System.out.println("Error al cargar las ventas: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -270,7 +263,7 @@ public class VentaView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -313,7 +306,7 @@ public class VentaView {
                 if (ventaController.cancelarVenta(id, motivo)) {
                     System.out.println("✓ Venta cancelada exitosamente!");
                 } else {
-                    System.out.println("✗ Error al cancelar la venta.");
+                    System.out.println("Error al cancelar la venta.");
                 }
             } else {
                 System.out.println("Operación cancelada.");
@@ -321,7 +314,7 @@ public class VentaView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -369,7 +362,7 @@ public class VentaView {
                 System.out.println("Ingresos del día: $" + totalDelDia);
             }
         } catch (Exception e) {
-            System.out.println("✗ Error al generar el reporte: " + e.getMessage());
+            System.out.println("Error al generar el reporte: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");

@@ -88,7 +88,7 @@ public class HistorialVentasView {
             List<Venta> ventas = ventaController.obtenerTodasLasVentas();
             mostrarListaVentas(ventas);
         } catch (Exception e) {
-            System.out.println("✗ Error al cargar las ventas: " + e.getMessage());
+            System.out.println("Error al cargar las ventas: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -122,9 +122,9 @@ public class HistorialVentasView {
             mostrarListaVentas(ventas);
 
         } catch (DateTimeParseException e) {
-            System.out.println("✗ Error: Formato de fecha inválido. Use dd/MM/yyyy");
+            System.out.println("Error: Formato de fecha inválido. Use dd/MM/yyyy");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -149,7 +149,7 @@ public class HistorialVentasView {
             LocalDate fechaFinal = LocalDate.parse(fechaFinalStr, formatter);
 
             if (fechaInicial.isAfter(fechaFinal)) {
-                System.out.println("✗ Error: La fecha inicial no puede ser posterior a la fecha final.");
+                System.out.println("Error: La fecha inicial no puede ser posterior a la fecha final.");
                 System.out.println("\nPresione Enter para continuar...");
                 scanner.nextLine();
                 return;
@@ -164,9 +164,9 @@ public class HistorialVentasView {
             mostrarListaVentas(ventas);
 
         } catch (DateTimeParseException e) {
-            System.out.println("✗ Error: Formato de fecha inválido. Use dd/MM/yyyy");
+            System.out.println("Error: Formato de fecha inválido. Use dd/MM/yyyy");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -188,9 +188,9 @@ public class HistorialVentasView {
             mostrarListaVentas(ventas);
 
         } catch (NumberFormatException e) {
-            System.out.println("✗ Error: Por favor, ingrese un número válido.");
+            System.out.println("Error: Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -211,7 +211,7 @@ public class HistorialVentasView {
             int anio = Integer.parseInt(scanner.nextLine().trim());
 
             if (mes < 1 || mes > 12) {
-                System.out.println("✗ Error: El mes debe estar entre 1 y 12.");
+                System.out.println("Error: El mes debe estar entre 1 y 12.");
                 System.out.println("\nPresione Enter para continuar...");
                 scanner.nextLine();
                 return;
@@ -230,9 +230,9 @@ public class HistorialVentasView {
             mostrarResumenVentas(ventas);
 
         } catch (NumberFormatException e) {
-            System.out.println("✗ Error: Por favor, ingrese números válidos.");
+            System.out.println("Error: Por favor, ingrese números válidos.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -262,9 +262,9 @@ public class HistorialVentasView {
             mostrarResumenVentas(ventas);
 
         } catch (NumberFormatException e) {
-            System.out.println("✗ Error: Por favor, ingrese un año válido.");
+            System.out.println("Error: Por favor, ingrese un año válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -286,7 +286,7 @@ public class HistorialVentasView {
             mostrarListaVentas(ventasCanceladas);
 
         } catch (Exception e) {
-            System.out.println("✗ Error al cargar las ventas canceladas: " + e.getMessage());
+            System.out.println("Error al cargar las ventas canceladas: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");

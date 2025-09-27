@@ -92,10 +92,10 @@ public class ClienteView {
             if (clienteController.crearCliente(nombre, apellido, cedula, telefono, email, direccion)) {
                 System.out.println("✓ Cliente creado exitosamente!");
             } else {
-                System.out.println("✗ Error al crear el cliente. Puede que la cédula o email ya existan.");
+                System.out.println("Error al crear el cliente. Puede que la cédula o email ya existan.");
             }
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -130,7 +130,7 @@ public class ClienteView {
                 }
             }
         } catch (Exception e) {
-            System.out.println("✗ Error al cargar los clientes: " + e.getMessage());
+            System.out.println("Error al cargar los clientes: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -202,7 +202,7 @@ public class ClienteView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -253,12 +253,12 @@ public class ClienteView {
             if (clienteController.actualizarCliente(id, nombre, apellido, telefono, email, direccion)) {
                 System.out.println("✓ Cliente actualizado exitosamente!");
             } else {
-                System.out.println("✗ Error al actualizar el cliente.");
+                System.out.println("Error al actualizar el cliente.");
             }
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -291,7 +291,7 @@ public class ClienteView {
                 if (clienteController.eliminarCliente(id)) {
                     System.out.println("✓ Cliente eliminado exitosamente!");
                 } else {
-                    System.out.println("✗ Error al eliminar el cliente.");
+                    System.out.println("Error al eliminar el cliente.");
                 }
             } else {
                 System.out.println("Operación cancelada.");
@@ -299,7 +299,7 @@ public class ClienteView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("ror: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");

@@ -92,10 +92,10 @@ public class ProveedorView {
             if (proveedorController.crearProveedor(nombre, razonSocial, ruc, telefono, email, direccion)) {
                 System.out.println("✓ Proveedor creado exitosamente!");
             } else {
-                System.out.println("✗ Error al crear el proveedor. Puede que el RUC o email ya existan.");
+                System.out.println("Error al crear el proveedor. Puede que el RUC o email ya existan.");
             }
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -132,7 +132,7 @@ public class ProveedorView {
                 }
             }
         } catch (Exception e) {
-            System.out.println("✗ Error al cargar los proveedores: " + e.getMessage());
+            System.out.println("Error al cargar los proveedores: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -192,7 +192,7 @@ public class ProveedorView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -251,12 +251,12 @@ public class ProveedorView {
             if (proveedorController.actualizarProveedor(id, nombre, razonSocial, telefono, email, direccion, contacto, telefonoContacto)) {
                 System.out.println("✓ Proveedor actualizado exitosamente!");
             } else {
-                System.out.println("✗ Error al actualizar el proveedor.");
+                System.out.println("Error al actualizar el proveedor.");
             }
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -289,7 +289,7 @@ public class ProveedorView {
                 if (proveedorController.eliminarProveedor(id)) {
                     System.out.println("✓ Proveedor eliminado exitosamente!");
                 } else {
-                    System.out.println("✗ Error al eliminar el proveedor. Puede que tenga productos asociados.");
+                    System.out.println("Error al eliminar el proveedor. Puede que tenga productos asociados.");
                 }
             } else {
                 System.out.println("Operación cancelada.");
@@ -297,7 +297,7 @@ public class ProveedorView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");

@@ -322,6 +322,263 @@ public class VentaDAO {
         }
     }
 
+    public Venta buscarPorNumero(String numeroVenta) {
+        String sql = """
+        SELECT v.*, c.nombre as cliente_nombre, c.apellido as cliente_apellido, c.cedula,
+               u.username, u.nombre as usuario_nombre, u.apellido as usuario_apellido
+        FROM ventas v
+        LEFT JOIN clientes c ON v.cliente_id = c.id
+        INNER JOIN usuarios u ON v.usuario_id = u.id
+        WHERE v.numero_venta = ?
+        """;
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = dbManager.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, numeroVenta);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Venta venta = mapResultSetToVenta(rs);
+                cargarDetallesVenta(venta, conn);
+                return venta;
+            }
+            return null;
+        } catch (SQLException e) {
+            System.err.println("Error al buscar venta por número: " + e.getMessage());
+            return null;
+        } finally {
+            dbManager.closeResources(conn, stmt, rs);
+        }
+    }
+
+    public List<Venta> obtenerVentasPorCliente(Long clienteId) {
+        String sql = """
+        SELECT v.*, c.nombre as cliente_nombre, c.apellido as cliente_apellido, c.cedula,
+               u.username, u.nombre as usuario_nombre, u.apellido as usuario_apellido
+        FROM ventas v
+        LEFT JOIN clientes c ON v.cliente_id = c.id
+        INNER JOIN usuarios u ON v.usuario_id = u.id
+        WHERE v.cliente_id = ?
+        ORDER BY v.fecha_venta DESC
+        """;
+
+        List<Venta> ventas = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = dbManager.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, clienteId);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                ventas.add(mapResultSetToVenta(rs));
+            }
+            // load details for each venta
+            for (Venta v : ventas) {
+                cargarDetallesVenta(v, conn);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener ventas por cliente: " + e.getMessage());
+        } finally {
+            dbManager.closeResources(conn, stmt, rs);
+        }
+        return ventas;
+    }
+
+    public List<Venta> obtenerVentasPorUsuario(Long usuarioId) {
+        String sql = """
+        SELECT v.*, c.nombre as cliente_nombre, c.apellido as cliente_apellido, c.cedula,
+               u.username, u.nombre as usuario_nombre, u.apellido as usuario_apellido
+        FROM ventas v
+        LEFT JOIN clientes c ON v.cliente_id = c.id
+        INNER JOIN usuarios u ON v.usuario_id = u.id
+        WHERE v.usuario_id = ?
+        ORDER BY v.fecha_venta DESC
+        """;
+
+        List<Venta> ventas = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = dbManager.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, usuarioId);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                ventas.add(mapResultSetToVenta(rs));
+            }
+            for (Venta v : ventas) {
+                cargarDetallesVenta(v, conn);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener ventas por usuario: " + e.getMessage());
+        } finally {
+            dbManager.closeResources(conn, stmt, rs);
+        }
+        return ventas;
+    }
+
+    public List<Venta> obtenerVentasPorEstado(Estado estado) {
+        String sql = """
+        SELECT v.*, c.nombre as cliente_nombre, c.apellido as cliente_apellido, c.cedula,
+               u.username, u.nombre as usuario_nombre, u.apellido as usuario_apellido
+        FROM ventas v
+        LEFT JOIN clientes c ON v.cliente_id = c.id
+        INNER JOIN usuarios u ON v.usuario_id = u.id
+        WHERE v.estado = ?
+        ORDER BY v.fecha_venta DESC
+        """;
+
+        List<Venta> ventas = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = dbManager.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, estado.name());
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                ventas.add(mapResultSetToVenta(rs));
+            }
+            for (Venta v : ventas) {
+                cargarDetallesVenta(v, conn);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener ventas por estado: " + e.getMessage());
+        } finally {
+            dbManager.closeResources(conn, stmt, rs);
+        }
+        return ventas;
+    }
+
+    public boolean actualizarEstadoConObservaciones(Long ventaId, Estado nuevoEstado, String observaciones) {
+        String sql = "UPDATE ventas SET estado = ?, observaciones = ? WHERE id = ?";
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = dbManager.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, nuevoEstado.name());
+            if (observaciones != null) {
+                stmt.setString(2, observaciones);
+            } else {
+                stmt.setNull(2, Types.VARCHAR);
+            }
+            stmt.setLong(3, ventaId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar estado y observaciones de venta: " + e.getMessage());
+            return false;
+        } finally {
+            dbManager.closeResources(conn, stmt);
+        }
+    }
+
+    public int contarVentasPorEstado(Estado estado) {
+        String sql = "SELECT COUNT(*) AS total FROM ventas WHERE estado = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = dbManager.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, estado == null ? null : estado.name());
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al contar ventas por estado: " + e.getMessage());
+        } finally {
+            dbManager.closeResources(conn, stmt, rs);
+        }
+        return 0;
+    }
+
+    public List<Producto> obtenerProductosMasVendidos(int limite) {
+        // Usa SQL Server syntax for TOP.
+        String sql = "SELECT TOP " + Math.max(0, limite) + " p.id, p.codigo, p.nombre as producto_nombre, p.precio_venta, SUM(dv.cantidad) AS total_vendido " +
+                "FROM detalle_ventas dv " +
+                "INNER JOIN productos p ON dv.producto_id = p.id " +
+                "INNER JOIN ventas v ON dv.venta_id = v.id " +
+                "WHERE v.estado = 'COMPLETADA' " +
+                "GROUP BY p.id, p.codigo, p.nombre, p.precio_venta " +
+                "ORDER BY total_vendido DESC";
+
+        List<Producto> productos = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = dbManager.getConnection();
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Producto p = new Producto();
+                p.setId(rs.getLong("id"));
+                p.setCodigo(rs.getString("codigo"));
+                p.setNombre(rs.getString("producto_nombre"));
+                p.setPrecioVenta(rs.getBigDecimal("precio_venta"));
+                // Note: total_vendido is not a field on Producto; if needed, extend Producto or return a DTO.
+                productos.add(p);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener productos más vendidos: " + e.getMessage());
+        } finally {
+            dbManager.closeResources(conn, stmt, rs);
+        }
+        return productos;
+    }
+
+    public List<Cliente> obtenerClientesConMasCompras(int limite) {
+        // Returns top clients by number of completed purchases.
+        String sql = "SELECT TOP " + Math.max(0, limite) + " c.id, c.nombre as cliente_nombre, c.apellido as cliente_apellido, c.cedula, COUNT(v.id) AS compras, SUM(v.total) AS total_gastado " +
+                "FROM ventas v " +
+                "INNER JOIN clientes c ON v.cliente_id = c.id " +
+                "WHERE v.estado = 'COMPLETADA' AND v.cliente_id IS NOT NULL " +
+                "GROUP BY c.id, c.nombre, c.apellido, c.cedula " +
+                "ORDER BY compras DESC, total_gastado DESC";
+
+        List<Cliente> clientes = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = dbManager.getConnection();
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Cliente c = new Cliente();
+                c.setId(rs.getLong("id"));
+                c.setNombre(rs.getString("cliente_nombre"));
+                c.setApellido(rs.getString("cliente_apellido"));
+                c.setCedula(rs.getString("cedula"));
+                // If you need compras or total_gastado values, consider returning a DTO instead of Cliente.
+                clientes.add(c);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener clientes con más compras: " + e.getMessage());
+        } finally {
+            dbManager.closeResources(conn, stmt, rs);
+        }
+        return clientes;
+    }
+
+
+
     private Venta mapResultSetToVenta(ResultSet rs) throws SQLException {
         Venta venta = new Venta();
         venta.setId(rs.getLong("id"));

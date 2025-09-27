@@ -103,10 +103,10 @@ public class RolView {
                                      puedeGestionarClientes, puedeGestionarProveedores)) {
                 System.out.println("✓ Rol creado exitosamente!");
             } else {
-                System.out.println("✗ Error al crear el rol. Verifique que el nombre no exista.");
+                System.out.println("Error al crear el rol. Verifique que el nombre no exista.");
             }
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -138,7 +138,7 @@ public class RolView {
                 }
             }
         } catch (Exception e) {
-            System.out.println("✗ Error al cargar los roles: " + e.getMessage());
+            System.out.println("Error al cargar los roles: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -183,7 +183,7 @@ public class RolView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -247,12 +247,12 @@ public class RolView {
                                           puedeGestionarClientes, puedeGestionarProveedores)) {
                 System.out.println("✓ Rol actualizado exitosamente!");
             } else {
-                System.out.println("✗ Error al actualizar el rol.");
+                System.out.println("Error al actualizar el rol.");
             }
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -285,7 +285,7 @@ public class RolView {
                 if (rolController.eliminarRol(id)) {
                     System.out.println("✓ Rol eliminado exitosamente!");
                 } else {
-                    System.out.println("✗ Error al eliminar el rol. Puede que haya usuarios asociados a este rol o sea un rol por defecto.");
+                    System.out.println("Error al eliminar el rol. Puede que haya usuarios asociados a este rol o sea un rol por defecto.");
                 }
             } else {
                 System.out.println("Operación cancelada.");
@@ -293,7 +293,7 @@ public class RolView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");

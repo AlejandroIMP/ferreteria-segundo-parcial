@@ -137,12 +137,12 @@ public class ProductView {
                                               precioCompra, precioVenta, stockMinimo, unidadMedida, proveedorId)) {
                 System.out.println("✓ Producto creado exitosamente!");
             } else {
-                System.out.println("✗ Error al crear el producto. Puede que el código ya exista.");
+                System.out.println("Error al crear el producto. Puede que el código ya exista.");
             }
         } catch (NumberFormatException e) {
-            System.out.println("✗ Error: Por favor, ingrese valores numéricos válidos.");
+            System.out.println("Error: Por favor, ingrese valores numéricos válidos.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -177,7 +177,7 @@ public class ProductView {
                 }
             }
         } catch (Exception e) {
-            System.out.println("✗ Error al cargar los productos: " + e.getMessage());
+            System.out.println("Error al cargar los productos: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -248,7 +248,7 @@ public class ProductView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -322,12 +322,12 @@ public class ProductView {
                                                    precioCompra, precioVenta, stockMinimo, unidadMedida, proveedorId)) {
                 System.out.println("✓ Producto actualizado exitosamente!");
             } else {
-                System.out.println("✗ Error al actualizar el producto.");
+                System.out.println("Error al actualizar el producto.");
             }
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese valores numéricos válidos.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -360,7 +360,7 @@ public class ProductView {
                 if (productController.eliminarProducto(id)) {
                     System.out.println("✓ Producto eliminado exitosamente!");
                 } else {
-                    System.out.println("✗ Error al eliminar el producto.");
+                    System.out.println("Error al eliminar el producto.");
                 }
             } else {
                 System.out.println("Operación cancelada.");
@@ -368,7 +368,7 @@ public class ProductView {
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese un número válido.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
@@ -431,12 +431,12 @@ public class ProductView {
             if (resultado) {
                 System.out.println("✓ Stock " + (aumentar ? "aumentado" : "reducido") + " exitosamente!");
             } else {
-                System.out.println("✗ Error al " + (aumentar ? "aumentar" : "reducir") + " el stock.");
+                System.out.println("Error al " + (aumentar ? "aumentar" : "reducir") + " el stock.");
             }
         } catch (NumberFormatException e) {
             System.out.println("Por favor, ingrese números válidos.");
         } catch (Exception e) {
-            System.out.println("✗ Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -466,7 +466,7 @@ public class ProductView {
                 }
             }
         } catch (Exception e) {
-            System.out.println("✗ Error al cargar los productos: " + e.getMessage());
+            System.out.println("Error al cargar los productos: " + e.getMessage());
         }
 
         System.out.println("\nPresione Enter para continuar...");
