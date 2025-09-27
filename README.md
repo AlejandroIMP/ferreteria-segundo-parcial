@@ -35,6 +35,3 @@ sqlcmd -S <SERVER> -U <USER> -P <PASSWORD> -i "src\main\resources\init_db.sql"
 
 Licencia
 Este proyecto incluye un archivo `LICENSE` (MIT) en la raíz. Revisa ese archivo para los términos de uso.
-
-Contacto
-Si necesitas más cambios (README más completo, instrucciones para Docker, o ayuda para automatizar la inicialización), dímelo y lo agrego.
